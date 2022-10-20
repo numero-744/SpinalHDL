@@ -1,0 +1,36 @@
+name: "Push scaladoc on gh-pages"
+
+on:
+  push:
+    branches:
+      - dev
+  release:
+    types:
+      - published
+
+jobs:
+  push-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - uses: ./.github/actions
+
+    - name: Build scaladoc
+      run: sbt clean compile unidoc
+
+    - name: Get gh-pages
+      run: git clone ${{ github.repositoryUrl }} -b gh-pages --depth=1 ghpages
+
+    - name: Update docs
+      run: mv target/scala-2.12/unidoc ghpages/${{ github.ref_name }}
+
+    - name: Push docs
+      run: |
+        cd ghpages
+        git add ${{ github.ref_name }}
+        git commit -m "Update scaladoc from ${{ github.ref_type }} ${{ github.ref_name }} (commit ${{ github.sha }})"
+        git push
