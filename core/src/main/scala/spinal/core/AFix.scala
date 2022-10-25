@@ -3,7 +3,6 @@ package spinal.core
 import scala.collection.mutable.ArrayBuffer
 import scala.math.BigDecimal.RoundingMode
 
-
 object AFix {
 
   def apply(maxRaw: BigInt,minRaw: BigInt, exp: ExpNumber) : AFix = new AFix(maxRaw = maxRaw, minRaw = minRaw, exp = exp.value)
