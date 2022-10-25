@@ -14,7 +14,7 @@ sbt -no-colors clean scalafmtCheck | while IFS= read ll
 do
 
   # Keep all lines in logs
-  echo "$ll"
+  #echo "$ll"
 
   # Skip lines which are not [warn]
   if ! [[ "$ll" =~ ^\[warn\] ]]; then
