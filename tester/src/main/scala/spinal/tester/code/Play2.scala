@@ -21,7 +21,6 @@ import spinal.lib.graphic.vga.{AvalonMMVgaCtrl, VgaCtrl}
 import spinal.lib.com.i2c._
 import spinal.lib.io.ReadableOpenDrain
 
-
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.sys.process.{ProcessLogger, Process, ProcessIO}
