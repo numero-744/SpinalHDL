@@ -1,7 +1,7 @@
 #!/bin/sh
 
 install_verilator(){
-  sudo apt install -y git make autoconf g++ flex libfl-dev bison  # First time prerequisites
+  sudo apt install -y git make autoconf build-essential flex libfl-dev bison  # First time prerequisites
   git clone http://git.veripool.org/git/verilator   # Only first time
   unset VERILATOR_ROOT  # For bash
   cd verilator
@@ -15,7 +15,7 @@ install_verilator(){
 }
 
 install_ghdl(){
-  sudo apt install -y gnat-9  libgnat-9 zlib1g-dev libboost-dev
+  sudo apt install -y gnat-9 libgnat-9 zlib1g-dev libboost-dev
   git clone https://github.com/ghdl/ghdl ghdl-build && cd ghdl-build
   git reset --hard "v1.0.0"
   mkdir build
@@ -27,9 +27,9 @@ install_ghdl(){
 }
 
 install_iverilog(){
-  sudo apt install -y gperf readline-common bison flex libfl-dev
-  curl -fsSL https://github.com/steveicarus/iverilog/archive/v10_3.tar.gz | tar -xvz
-  cd iverilog-10_3
+  sudo apt install -y gperf readline-common build-essential bison flex libfl-dev
+  curl -fsSL https://github.com/steveicarus/iverilog/archive/v11_0.tar.gz | tar -xvz
+  cd iverilog-11_0
   autoconf
   ./configure  --prefix ~/tools
   make -j$(nproc)
