@@ -9,7 +9,7 @@ on:
       - dev
 
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
@@ -19,51 +19,45 @@ jobs:
         submodules: 'recursive'
     - uses: ./.github/actions
 
-    ##############################################
+  compile:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
 
-    - name: Compile tests
-      run: sbt "+test:compile"
+    steps:
+    - run: sbt "+test:compile"
 
-    - name: Run tests
-      run: sbt "++2.11.12; testWithoutFormal"
+  test:
+    needs: compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+    - run: sbt "++2.11.12; testWithoutFormal"
 
   formal:
+    needs: compile
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-    - uses: ./.github/actions
-
-    ##############################################
-
-    - name: Run tests
-      run: sbt "++2.11.12; testFormal"
+    - run: sbt "++2.11.12; testFormal"
 
   scaladoc:
+    needs: compile
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-
-    - name: Build scaladoc
-      run: sbt unidoc
+    - run: sbt unidoc
 
   fmt-lint:
+    needs: compile
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: github.ref != 'refs/heads/dev'
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-    - uses: ./.github/actions
     - name: Fetch dev to be able to check only modified files
       run: |
         git fetch --depth=1 origin dev
